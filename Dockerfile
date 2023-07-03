@@ -112,7 +112,7 @@ COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 
 COPY --from=builder /usr/local /usr/local
 
-COPY --from=builder /usr/lib /usr/lib
+COPY --from=builder /usr/lib/libpcre.so.1 /usr/lib/libgcc_s.so.1 /usr/lib/
 
 RUN rm /etc/nginx/conf.d/default.conf
 
