@@ -100,19 +100,21 @@ RUN cd /lua-resty-lrucache && make install PREFIX=/etc/nginx
 
 # ENTRYPOINT /bin/sh
 
+
+
 FROM nginx:1.21.6-alpine 
 # Copy new dynamic module ngx_http_proxy_connect_module
 
-RUN apk add --no-cache \
-  pcre \
-  pcre2
-
 COPY --from=builder /usr/lib/nginx/modules/*.so /usr/lib/nginx/modules/
-# Copy new nginx binary, due to patching for ngx_http_proxy_connect_module
+
+# Copy new nginx binary, due to its patching
 COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 
+COPY --from=builder /usr/local /usr/local
+
+COPY --from=builder /usr/lib /usr/lib
+
 RUN rm /etc/nginx/conf.d/default.conf
-# COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 8080
 STOPSIGNAL SIGTERM
